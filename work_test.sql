@@ -1,5 +1,5 @@
 
---1
+-- 1
 
 USE NEWBIE;
 GO
@@ -27,11 +27,7 @@ FROM 'C:\Users\haitov_bn\Documents\shedulers.csv'
 WITH (FIRSTROW = 2, CODEPAGE = 'ACP')
 
 
-
-
-
-
---2
+-- 2
 CREATE TABLE dbo.WORK_DAYS (		--	DROP TABLE NEWBIE.dbo.WORK_DAYS;
 FIO NVARCHAR (65),
 DATE_BEGIN DATETIME,
@@ -118,5 +114,35 @@ EXEC NEWBIE.dbo.PRC_SHEDULERS '2019-01-03', '2019-02-02';
 SELECT *
 FROM NEWBIE.dbo.WORK_DAYS
 
+/*
+SELECT DATEDIFF (d, '2019-01-01', '2019-01-05')
 
+SELECT TOP 1000000 ROW_NUMBER() OVER(ORDER BY t1.number) as number
+from master..spt_values t1 
+cross join master..spt_values t2
+*/
+
+
+
+-- 4
+
+-- Кол-во отработанных дней
+SELECT s.FIO
+	 , COUNT (s.DATE_BEGIN) AS WORK_DAYS
+FROM NEWBIE.dbo.WORK_DAYS AS s
+GROUP BY s.FIO;
+
+-- Список сотрудников у которых было больше 10 рабочих дней за январь 2019 года
+SELECT s.FIO
+FROM NEWBIE.dbo.WORK_DAYS AS s
+WHERE 1=1
+	AND CAST (s.DATE_BEGIN AS DATE) BETWEEN '2019-01-01' AND '2019-01-31'
+GROUP BY s.FIO
+HAVING COUNT (s.DATE_BEGIN) > 10;
+
+-- Сотрудники, отработавшие 14,15,16 января 2019 года
+SELECT DISTINCT s.FIO
+FROM NEWBIE.dbo.WORK_DAYS AS s
+WHERE 1=1
+	AND CAST (s.DATE_BEGIN AS DATE) IN ('2019-01-14', '2019-01-15', '2019-01-16');
 
